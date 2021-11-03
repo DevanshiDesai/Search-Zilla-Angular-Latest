@@ -1,0 +1,27 @@
+<div id="favorites" [ngClass]="{ 'active':service.activeTab==='favorites'}"  *ngIf="service.favorites.length>0">
+<table  class="table table-striped" style="border: 1px solid; border-collapse: collapse; margin-left: auto; margin-right: auto;">
+  <tr>
+    <th scope="col">#</th>
+    <th scope="col">Date</th>
+    <th scope="col">Event</th>
+    <th scope="col">Category</th>
+    <th scope="col">Venue Info</th>
+    <th scope="col">Favorite</th>
+  </tr>
+  <tr *ngFor="let result of service.favorites; index as i">
+      <td>{{ i+1 }}</td>
+      <td>{{ result.date }}</td>
+      <td><a [routerLink]="['/details', result.id]">{{ result.name }}</a></td>
+      <td>{{ result.category }}</td>
+      <td>{{ result.venue }}</td>
+      <td><button  mat-icon-button (click)="service.removeFromFav(result.id)">
+        <i class="bi bi-trash-fill fa-lg"></i>
+      </button></td>
+    </tr>
+</table>
+</div>
+<div *ngIf="service.favorites.length==0">
+  <div class="alert alert-warning" role="alert">
+    No records
+  </div>
+</div>
