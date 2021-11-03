@@ -1,0 +1,46 @@
+.list-button{
+    float: left;
+    color: lightgrey;
+}
+.fav-tweet{
+    float:right;
+}
+.dark-modal .modal-content {
+    background-color: #292b2c;
+    color: white;
+  }
+  .dark-modal .close {
+    color: white;
+  }
+  .light-blue-backdrop {
+    background-color: #5cb3fd;
+  }
+  /* Set the size of the div element that contains the map */
+  agm-map {
+    height: 500px;
+  }
+  #detailsName{
+    text-align: center;
+  }
+  .positionRelative{
+    position: relative;
+
+}
+.percentageValue {
+    left: 10px;
+    top: 40%;
+    position: absolute;
+    width: 100%;
+    font-size: 13px;
+    font-weight: 600;
+}
+.yellow-fill{
+  color:goldenrod;
+  border: black 1px solid; border-radius: 5px; padding:'5px'
+}
+.white-fill{
+  border: black 1px solid; border-radius: 5px; padding:'5px'
+}
+.favorites{
+  size:10px
+}

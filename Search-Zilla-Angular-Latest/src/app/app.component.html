@@ -1,0 +1,98 @@
+<div id="container">
+  <h5 style="text-align: center;">Entertainment Event Ticket Search</h5>
+  <form [formGroup]="searchForm" (ngSubmit)="onSubmit()" class="needs-validation" method="GET" autocomplete="off" [ngClass]="{'is-invalid': !keyword.valid && keyword.touched}" novalidate>
+    <div class="form-group row">
+      <label for="keyword" class="col-sm-2 col-form-label">Keyword<span id="label-required"> *</span></label>
+      <div class="col-sm-10">
+        <div>
+        <input matInput type="text" id="keyword" placeholder="Enter Artist, Team or Event Name (eg. Lakers)" class="form-control" [formControl]="keyword" [matAutocomplete]="auto" [ngClass]="{'is-invalid': !keyword.valid && keyword.touched}" required>
+        <mat-autocomplete #auto="matAutocomplete">
+          <mat-option *ngFor="let street of filteredStreets | async" [value]="street">
+            {{street}}
+          </mat-option>
+        </mat-autocomplete>
+        <div *ngIf="!keyword.valid && keyword.touched"  class="invalid-feedback">
+          Please enter a keyword.
+        </div>
+      </div>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label for="category" class="col-sm-2 col-form-label">Category</label>
+      <div id="category" class="col-sm-4">
+        <select [formControl]="category"  class="form-control">
+          <option value="default" selected>All</option>
+          <option value="KZFzniwnSyZfZ7v7nJ">Music</option>
+          <option value="KZFzniwnSyZfZ7v7nE">Sports</option>
+          <option value="KZFzniwnSyZfZ7v7na">Art & Theatre</option>
+          <option value="KZFzniwnSyZfZ7v7nn">Film</option>
+          <option value="KZFzniwnSyZfZ7v7n1">Miscellaneous</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label for="distance" class="col-sm-2 col-form-label">Distance</label>
+      <div class="col-sm-4">
+        <input type="number" [formControl]="distance" id="distance" class="form-control" placeholder="10">
+      </div>
+      <div class="col-sm-3">
+        <select [formControl]="units" class="form-control">
+          <option value="miles" selected>Miles</option>
+          <option value="km">Kilometer</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label for="from" class="col-sm-2 col-form-label">From <span id="label-required">*</span></label>
+      <div class="col-sm-4">
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="from" id="current" value="current" (click)="toggle('current')" checked >
+          <label class="form-check-label" for="current">
+            Current Location
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="form-group row">
+      <div class="col-sm-2"></div>
+      <div class="col-sm-4">
+        <div class="form-check">
+          <input class="form-check-input" (click)="toggle('specified')" type="radio" name="from" id="specified" value="specified">
+          <label class="form-check-label" for="specified" >
+            Other, Please specify,
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="form-group row">
+      <div class="col-sm-2"></div>
+      <div class="col-sm-10">
+        <input type="text" id="enteredLoc" [formControl]="enteredLoc" class="form-control" [attr.disabled]="textBoxDisabled ? '' : null" required [ngClass]="{'is-invalid': from.value === 'specified' && !enteredLoc.valid && enteredLoc.touched}">
+        <div class="invalid-feedback" *ngIf="from.value === 'specified' && !enteredLoc.valid && enteredLoc.touched">
+          Please provide a location.
+        </div>
+      </div>
+    </div>
+    <div class="form-group row">
+      <div class="col-sm-7">
+        <button type="submit" class="btn btn-primary mx-2" routeLink="/display"  routerLinkActive="activebutton" id="searchButton" [disabled]="!checkLoc || !keyword.valid || (from.value === 'specified' && !enteredLoc.valid)"><i class="bi bi-search"></i>
+          Search</button>
+        <button type="reset" (click)="onClear()" routeLink="/display" routerLinkActive="activebutton" class="btn btn-light mx-2" style="border: 1px solid;"><i class="bi bi-list-nested"></i> Clear</button>
+      </div>
+    </div>
+  </form>
+</div><br>
+<nav id="navbar" >
+  <ul class="nav nav-pills" style="display: flex; justify-content: center;">
+    <li class="nav-item">
+  <a class="nav-link active" href="#display" [ngClass]="{ 'active':service.activeTab==='display'}" (click)="service.display('display')"
+  data-toggle="tab" routerLink="/display"  routerLinkActive="activebutton">Results</a> </li>
+  <li class="nav-item">
+  <a class="nav-link" routerLink="/favorites" routerLinkActive="activebutton" href="#favorites" [ngClass]="{ 'active':service.activeTab==='favorites'}" data-toggle="tab"
+  (click)="service.fav('favorites')">Favorites</a></li>
+</ul>
+</nav>
+<br>
+  <div [@routeAnimations]="prepareRoute(outlet)">
+    <router-outlet #outlet="outlet"></router-outlet>
+  </div>

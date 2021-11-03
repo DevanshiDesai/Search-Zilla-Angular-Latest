@@ -1,0 +1,182 @@
+<div *ngIf="service.detailResult!==undefined">
+  <h4 id="detailsName">{{ service.detailResult.tooltipName }}</h4>
+  <a id="list-button" class="button btn btn-light mx-1" routerLink="/display">&#60; List</a>
+  <div>
+    <!-- <button class="btn-outline-light" style="float: right;"> -->
+    <a style="float: right;" (click)="service.favClickFromDetail(detail_id,service.detailResult)">
+      <p><i style="border: black 1px solid; border-radius: 5px; padding:'5px'"
+          [ngClass]="service.isFav(detail_id) ? 'bi bi-star-fill fa-lg yellow-fill' : 'bi bi-star fa-lg white-fill'"></i>
+      </p>
+    </a>
+    <button class="btn-outline-secondary"
+      style="float: right; background-color: transparent; border:1px solid; border-radius:5px; margin:'5px 5px 15px 5px'">
+      <a [href]="service.url" data-size="large">
+        <a class="twitter-share-button" [href]="service.url" target="_blank" data-size="large">
+          <i class="bi bi-twitter" data-size="large"></i></a></a></button>
+  </div><br><br>
+  <div>
+    <ul class="nav nav-tabs" id="myTab" role="tablist" style="float: right;">
+      <li class="nav-item">
+        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home"
+          aria-selected="true">Event</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile"
+          aria-selected="false">Artist/Team(s)</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact"
+          aria-selected="false">Venue</a>
+      </li>
+    </ul>
+    <div class="tab-content" id="myTabContent">
+      <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+        <table class="table table-striped">
+          <tbody>
+            <tr *ngIf="service.detailResult.artists!=undefined">
+              <th scope="row">Artists/Team(s)</th>
+              <td>{{ service.detailResult.artists }}</td>
+            </tr>
+            <tr *ngIf="service.detailResult.venue!=undefined">
+              <th scope="row">Venue</th>
+              <td>{{ service.detailResult.venue }}</td>
+            </tr>
+            <tr *ngIf="service.detailResult.time!=undefined">
+              <th scope="row">Time</th>
+              <td>{{ service.detailResult.time | date: 'mediumDate' }}</td>
+            </tr>
+            <tr *ngIf="service.detailResult.category!=undefined">
+              <th scope="row">Category</th>
+              <td>{{ service.detailResult.category }}</td>
+            </tr>
+            <tr *ngIf="service.detailResult.priceRange!=undefined">
+              <th scope="row">Price Range</th>
+              <td>{{ service.detailResult.priceRange }}</td>
+            </tr>
+            <tr *ngIf="service.detailResult.ticketStatus!=undefined">
+              <th scope="row">Ticket Status</th>
+              <td>{{ service.detailResult.ticketStatus }}</td>
+            </tr>
+            <tr *ngIf="service.detailResult.buyTicketAt!=undefined">
+              <th scope="row">Buy Ticket At</th>
+              <td><a [href]="service.detailResult.buyTicketAt" target="_blank">Ticketmaster</a></td>
+            </tr>
+            <tr *ngIf="service.detailResult.seatMap!=undefined">
+              <th scope="row">Seat Map</th>
+              <td><a href="#" data-toggle="modal" data-target="#modalRegister">View Seat Map Here</a></td>
+              <div id="modalRegister" class="modal fade" role="dialog">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h4 class="modal-title">View Seat Map</h4>
+                      <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                      <img [src]="service.detailResult.seatMap" style="height:300px" />
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </tr>
+          </tbody>
+        </table>
+
+      </div>
+      <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+        <div *ngIf="service.detailResult!=undefined">
+          <div *ngIf="service.detailResult.artistArray.length>0">
+            <table class="table" *ngFor="let artistInfo of service.detailResult.artistArray">
+              <thead colspan="2" style="text-align: center;">
+                <h5>{{ artistInfo.keyword }}</h5>
+              </thead>
+                <tbody *ngIf="artistInfo.data!=null">
+                  <tr *ngIf="artistInfo.data.name!=undefined">
+                    <th scope="row" *ngIf="artistInfo.data.name!=undefined">Name</th>
+                    <td>{{ artistInfo.data.name }}</td>
+                  </tr>
+                  <tr *ngIf="artistInfo.data.followers!=undefined">
+                    <th scope="row">Followers</th>
+                    <td>{{ artistInfo.data.followers}}</td>
+                  </tr>
+                  <tr *ngIf="artistInfo.data.popularity!=undefined">
+                    <th scope="row">Popularity</th>
+                    <td>
+                      <div class="positionRelative">
+                        <round-progress [current]="artistInfo.data.popularity" [max]="100" [color]="'	#9ACD32'"
+                          [background]="'#eaeaea'" [radius]="17" [stroke]="3" [rounded]="true" [clockwise]="false"
+                          [responsive]="false" [duration]="800" [animation]="'easeInOutQuart'" [animationDelay]="0">
+                        </round-progress>
+                        <div class="percentageValue">
+                          {{ artistInfo.data.popularity }}
+                        </div>
+                      </div>
+                    </td>
+
+                  </tr>
+                  <tr *ngIf="artistInfo.data.checkAt!=undefined">
+                    <th scope="row">Check At</th>
+                    <td><a [href]="artistInfo.data.checkAt" target="_blank">Spotify</a></td>
+                  </tr>
+                </tbody>
+                <tbody *ngIf="artistInfo.data==null">
+                <h6 style="text-align: center;">No details available</h6><br><br>
+              </tbody>
+              
+            </table>
+          </div>
+          <div *ngIf="service.detailResult.artistArray.length==0">
+            <br><br><br><br><br><br>
+            <div class="alert alert-warning" role="alert">
+              No records
+            </div> <br><br><br><br><br><br>
+          </div>
+          <div *ngIf="service.detailResult.artistArray && service.detailResult.artistArray[0]===null && (service.detailResult.artistArray | json) != ({} | json)">
+            <h6 style="text-align: center;">No details available</h6><br><br>
+          </div>
+        </div>
+      </div>
+      <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+        <div *ngIf="service.detailResult!=undefined">
+          <table class="table">
+            <tbody>
+              <tr *ngIf="service.detailResult.address!=undefined">
+                <th scope="row">Address</th>
+                <td>{{ service.detailResult.address}}</td>
+              </tr>
+              <tr *ngIf="service.detailResult.city!=undefined">
+                <th scope="row">City</th>
+                <td>{{ service.detailResult.city}}</td>
+              </tr>
+              <tr *ngIf="service.detailResult.phoneNo!=undefined">
+                <th scope="row">Phone Number</th>
+                <td>{{ service.detailResult.phoneNo}}</td>
+              </tr>
+              <tr *ngIf="service.detailResult.openHours!=undefined">
+                <th scope="row">Open Hours</th>
+                <td>{{ service.detailResult.openHours}}</td>
+              </tr>
+              <tr *ngIf="service.detailResult.generalRule!=undefined">
+                <th scope="row">General Rule</th>
+                <td>{{ service.detailResult.generalRule}}</td>
+              </tr>
+              <tr *ngIf="service.detailResult.childRule!=undefined">
+                <th scope="row">Child Rule</th>
+                <td>{{ service.detailResult.childRule}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div
+          *ngIf="service.detailResult!=undefined && service.detailResult.venueLat!=null && service.detailResult.venueLong!=null">
+          <agm-map [zoom]="15" [latitude]="service.detailResult.venueLat" [longitude]="service.detailResult.venueLong">
+            <agm-marker [latitude]="service.detailResult.venueLat" [longitude]="service.detailResult.venueLong">
+            </agm-marker>
+          </agm-map>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

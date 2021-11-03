@@ -1,0 +1,51 @@
+<div id="display" [ngClass]="{ 'active':service.activeTab==='display'}"  *ngIf="service.isLoading==false">
+  <button [disabled]="service.retainID==''" style="background-color: transparent; float:right; border:0px">
+  <a *ngIf="service.searchTriggered && service.retainID!=''" id="details" class="button btn btn-light mx-1"  routerLinkActive="activebutton" [routerLink]="['/details',service.retainID]" >Details ></a> 
+  <span *ngIf="service.retainID=='' && service.searchTriggered==true" disabled> Details > </span>
+  </button>
+  <div *ngIf="service.searchTriggered==true && service.error!=''">
+    <div class="alert alert-danger" role="alert">
+      {{service.error | json}}
+    </div>
+  </div>
+  <div *ngIf="service.resultSets.length>0">
+    <table *ngIf="service.searchTriggered" class="table table-hover">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Date</th>
+          <th scope="col">Event</th>
+          <th scope="col">Category</th>
+          <th scope="col">Venue Info</th>
+          <th scope="col">Favorite</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let result of service.resultSets">
+          <td>{{ result.index }}</td>
+          <td>{{ result.date }}</td>
+          <td *ngIf="!result.tooltipReq"><a [routerLink]="['/details', result.id]"><button mat-button
+                #tooltip="matTooltip" [matTooltip]="result.tooltipName" matTooltipPosition="right">
+                {{ result.name }}</button></a></td>
+          <td *ngIf="result.tooltipReq"><a [routerLink]="['/details', result.id]">{{ result.name }}</a></td>
+          <td>{{ result.category }}</td>
+          <td>{{ result.venue }}</td>
+          <td><a mat-icon-button (click)="service.clickEvent(result.id,result)">
+              <i  [ngClass]="service.isFav(result.id) ? 'bi bi-star-fill fa-lg yellow-fill' : 'bi bi-star fa-lg'"></i>
+            </a></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div *ngIf="service.resultSets.length==0 && service.searchTriggered==true &&  service.error==''">
+    <div class="alert alert-warning" role="alert">
+      No records
+    </div>
+  </div>
+</div>
+<div *ngIf="service.isLoading==true">
+  <div class="progress">
+    <div class="progress-bar progress-bar-striped" role="progressbar" style="width: 50%" aria-valuenow="50"
+      aria-valuemin="0" aria-valuemax="100"></div>
+  </div>
+</div>
